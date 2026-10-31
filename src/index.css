@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* Registrar los colores del tema como <color> permite que el navegador los ANIME */
+@property --team {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #E8002D;
+}
+
+@property --team-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #FFEB00;
+}
+
+@theme {
+  --color-base: #0B0E14;
+  --color-surface: #11151D;
+  --color-surface-2: #181D28;
+  --color-muted: #8B93A7;
+
+  /* Colores semánticos de las pantallas de timing de F1 */
+  --color-timing-purple: #B14AFF;
+  --color-timing-green: #00E676;
+  --color-timing-yellow: #FFD60A;
+
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+
+  --animate-speed-lines: speed-lines 6s linear infinite;
+  --animate-marquee: marquee 45s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes speed-lines {
+    to {
+      transform: skewX(-20deg) translateX(-120px);
+    }
+  }
+}
+
+/* "inline" → las clases usan var(--team) directo, se resuelve en cada elemento */
+@theme inline {
+  --color-team: var(--team);
+  --color-team-2: var(--team-2);
+}
+
+:root {
+  --team: #E8002D;
+  --team-2: #FFEB00;
+}
+
+body {
+  background-color: var(--color-base);
+  color: white;
+  font-family: var(--font-mono);
+}
+
+@utility glow-team {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--team) 40%, transparent),
+              0 0 24px color-mix(in srgb, var(--team) 25%, transparent);
+}
+
+/* Al cambiar --team / --team-2 en este elemento, el color se funde en 0,7 s */
+@utility theme-transition {
+  transition: --team 0.7s ease, --team-2 0.7s ease;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Foco visible y coherente con el tema para todos los controles */
+@layer base {
+  :where(a, button, select, summary, input, textarea):focus-visible {
+    outline: 2px solid var(--team);
+    outline-offset: 2px;
+  }
+}
